@@ -1,44 +1,42 @@
-# 🏆 FitPact
-PWA de planeamento de atividades físicas e acompanhamento entre amigos, com autenticação Supabase e partilha WhatsApp.
+# FitPact
+
+PWA para planejamento semanal de exercícios, acompanhamento entre amigos e compartilhamento pelo WhatsApp.
 
 ## Instalação
-1. Execute `migration_v1_5.sql` no SQL Editor do Supabase **antes** de publicar esta versão.
-2. Publique `index.html`, `app.js`, `manifest.webmanifest`, `icon.svg`, `icon-192.png` e `icon-512.png` na raiz do repositório GitHub Pages.
-3. Confirme que a URL do projeto e a chave publishable em `app.js` correspondem ao seu Supabase.
-4. Configure a Site URL e a Redirect URL para `https://viniciusfac.github.io/fitpact/`.
 
-## Release notes
-### v1.5.0 — 12/10/2026
-**Added**
-- Horários opcionais de início e fim, observação e marcador PT por treino.
-- Seleção de atividade por lista suspensa, incluindo substituição.
-- Edição de treino planeado.
+Publique `index.html`, `app.js`, `manifest.webmanifest` e os ícones na raiz do GitHub Pages. Configure a URL do site e de redirecionamento no Supabase Authentication. A versão 1.6.0 utiliza a estrutura de banco já migrada para a 1.5.0.
 
-**Changed**
-- Meta semanal calculada automaticamente a partir dos dias com atividades planeadas que contam como treino.
-- Conclusão de exercício com um toque, sem perguntar data.
-- PT é um atributo do treino e não um exercício separado.
-- Preservação do nome de apresentação ao iniciar sessão.
+## Release Notes
 
-**Fixed**
-- Impede que o login regrave o nome de apresentação existente.
-- Redirecionamento de confirmação de email para o caminho `/fitpact/`.
+### v1.6.0 — 12/10/2026
+- **Added:** abas Plano Semanal, Histórico e Atividades; filtros do histórico; recuperação como opção do dia.
+- **Changed:** interface em português brasileiro; notificações temporárias no topo; PT como atributo; substituições indicadas por ícone; resumo com “Concluído” e “Histórico”.
+- **Fixed:** estatísticas filtradas pelo usuário selecionado; botão Atualizar removido.
+- **Security:** permissões e políticas RLS devem continuar configuradas e testadas no Supabase.
+
+### v1.5.0
+- **Added:** horários opcionais, observações e indicador de personal trainer.
+- **Changed:** meta calculada a partir dos dias com treinos planejados.
 
 ### v1.4.3
-- Correção de validação da URL do Supabase.
+- **Fixed:** validação da URL do Supabase.
+
 ### v1.4.2
-- Ícone no separador, versão no cabeçalho e estado de carregamento.
+- **Added:** ícones e versão no cabeçalho.
+- **Fixed:** feedback de inicialização.
+
 ### v1.4.1
-- Correção de carregamento da biblioteca Supabase.
+- **Fixed:** carregamento da biblioteca Supabase.
+
 ### v1.4.0
-- Autenticação, dados remotos, amizades e histórico no Supabase.
+- **Added:** autenticação, sincronização, amizades e histórico no Supabase.
 
 ## Limitações conhecidas
-- A sincronização é por consulta periódica; não há fila de alterações offline.
-- A confirmação de uma atividade usa a data do dia planeado; reprogramação permanece como fluxo separado.
-- As metas antigas na tabela `weekly_goals` não são usadas pela interface 1.5.
-- Registos antigos de «Treino com PT» continuam como atividades até serem editados ou removidos manualmente.
-- A validação em dois dispositivos e das políticas RLS ainda é necessária antes de partilhar com terceiros.
+- Recuperações antigas registradas como atividade permanecem no histórico; podem exigir limpeza manual.
+- A sincronização depende de conexão à Internet; não há fila offline.
+- O histórico personalizado filtra pela semana inicial.
+- O acesso entre amigos e as políticas RLS precisam de teste em duas contas antes de utilização real.
 
 ## Roadmap
-- Sincronização em tempo real, modo offline com resolução de conflitos e relatórios históricos mais detalhados.
+- Sincronização offline e notificações de mudanças entre amigos.
+- Melhoria de reagendamento com seletor visual de datas.
