@@ -15,7 +15,26 @@ const name=a=>a?`${a.emoji} ${a.name}`:'';
 const owned=()=>viewId===user.id;
 async function call(p){let r=await p;if(r.error)throw r.error;return r.data}
 async function run(fn){try{notice('A guardar...');await fn();await refresh();notice('Atualizado com sucesso.')}catch(e){notice('Erro: '+e.message)}}
-async function init(){if(!window.supabase?.createClient){notice('Não foi possível carregar a biblioteca Supabase. Verifica a ligação à Internet ou bloqueios do navegador.');return}client=window.supabase.createClient(URL,PUBLIC_KEY);const {data}=await client.auth.getSession();if(data.session)await signed(data.session.user);client.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT'){user=null;$('app').classList.add('hide');$('auth').classList.remove('hide')}else if(event==='SIGNED_IN'&&session?.user&&session.user.id!==user?.id){setTimeout(()=>signed(session.user),0)}})}
+async function init(){
+  if(!window.supabase?.createClient){notice('Erro: biblioteca Supabase indisponível. Confirma a ligação à Internet e recarrega a página.');return}
+  try { client=window.supabase.createClient(URL,PUBLIC_KEY); }
+  catch(e){notice('Erro ao configurar Supabase: '+e.message);return}
+  // Não bloquear indefinidamente o ecrã de entrada à espera da sessão.
+  notice('A verificar sessão...');
+  try {
+    const {data,error}=await Promise.race([
+      client.auth.getSession(),
+      new Promise((_,reject)=>setTimeout(()=>reject(new Error('Tempo limite ao verificar sessão. Podes tentar entrar ou atualizar a página.')),10000))
+    ]);
+    if(error)throw error;
+    if(data?.session?.user){await signed(data.session.user)}
+    else notice('Pronto. Entra com a tua conta ou cria uma nova.');
+  } catch(e){notice('Aviso: '+e.message)}
+  client.auth.onAuthStateChange((event,session)=>{
+    if(event==='SIGNED_OUT'){user=null;$('app').classList.add('hide');$('auth').classList.remove('hide');notice('Sessão terminada. Podes entrar novamente.')}
+    else if(event==='SIGNED_IN'&&session?.user&&session.user.id!==user?.id){setTimeout(()=>signed(session.user),0)}
+  });
+}
 async function signed(u){user=u;viewId=u.id;$('auth').classList.add('hide');$('app').classList.remove('hide');$('who').textContent=u.email;$('myid').textContent=u.id;await run(async()=>{await call(client.from('profiles').upsert({id:u.id,display_name:u.user_metadata?.display_name||u.email.split('@')[0]},{onConflict:'id'}));const own=await call(client.from('activities').select('id').eq('user_id',u.id).limit(1));if(!own.length)await call(client.from('activities').insert(DEFAULT.map(([emoji,name,counts_as_training])=>({user_id:u.id,emoji,name,counts_as_training}))))})}
 async function refresh(){if(!user||loading)return;loading=true;try{const [f,p,a,g,w]=await Promise.all([call(client.from('friendships').select('*').or(`requester_id.eq.${user.id},addressee_id.eq.${user.id}`)),call(client.from('profiles').select('*')),call(client.from('activities').select('*').order('created_at')),call(client.from('weekly_goals').select('*')),call(client.from('workouts').select('*').order('scheduled_date').order('created_at'))]);friends=f;profiles=p;activities=a;goals=g;workouts=w;render()}catch(e){notice('Falha ao carregar: '+e.message)}finally{loading=false}}
 function selectOptions(){const sel=$('viewer'),old=viewId;sel.replaceChildren();const ids=[user.id,...friends.filter(f=>f.status==='accepted').map(f=>f.requester_id===user.id?f.addressee_id:f.requester_id)];for(const id of ids){const p=profiles.find(p=>p.id===id),o=document.createElement('option');o.value=id;o.textContent=id===user.id?'Eu':(p?.display_name||'Amigo');sel.append(o)}if(!ids.includes(old))viewId=user.id;sel.value=viewId;$('displayName').value=profiles.find(p=>p.id===user.id)?.display_name||''}
