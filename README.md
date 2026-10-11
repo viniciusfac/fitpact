@@ -16,3 +16,6 @@ PWA com login por email, biblioteca de atividades por utilizador, planeamento, s
 - A chave publishable é pública e deve ser protegida pelas políticas RLS da base de dados.
 - A biblioteca supabase-js é carregada por CDN; é necessária Internet na primeira carga.
 - A instalação PWA requer publicação em HTTPS e configuração de service worker numa futura revisão.
+
+## Correção 1.4.1
+Corrige o endereço do script UMD supabase-js (antes usava supabase.min.js, não disponível na distribuição), adiciona fallback unpkg e mensagens de erro mais claras. Substituir index.html e app.js na raiz do repositório.
