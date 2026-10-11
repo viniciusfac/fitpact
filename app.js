@@ -1,5 +1,5 @@
 'use strict';
-const URL='https://nrctuwibfkwbpworhvtc.supabase.co';
+const SUPABASE_URL='https://nrctuwibfkwbpworhvtc.supabase.co';
 const PUBLIC_KEY='sb_publishable_WjhYh6_vZ7SBbK_eNX5Snw_WDStA7LC';
 const $=id=>document.getElementById(id), D=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
 const DEFAULT=[['🧘','Recuperação',false],['🦵','Musculação — inferiores',true],['💪','Musculação — superiores',true],['🏃','Corrida de rua',true],['🏃‍♂️','Corrida na passadeira',true],['🗣️','Treino com PT',true]];
@@ -17,7 +17,11 @@ async function call(p){let r=await p;if(r.error)throw r.error;return r.data}
 async function run(fn){try{notice('A guardar...');await fn();await refresh();notice('Atualizado com sucesso.')}catch(e){notice('Erro: '+e.message)}}
 async function init(){
   if(!window.supabase?.createClient){notice('Erro: biblioteca Supabase indisponível. Confirma a ligação à Internet e recarrega a página.');return}
-  try { client=window.supabase.createClient(URL,PUBLIC_KEY); }
+  try {
+    const parsed = new window.URL(SUPABASE_URL);
+    if(parsed.protocol !== 'https:' || !parsed.hostname.endsWith('.supabase.co')) throw new Error('URL do projeto inválida: '+SUPABASE_URL);
+    client=window.supabase.createClient(parsed.origin,PUBLIC_KEY);
+  }
   catch(e){notice('Erro ao configurar Supabase: '+e.message);return}
   // Não bloquear indefinidamente o ecrã de entrada à espera da sessão.
   notice('A verificar sessão...');
