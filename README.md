@@ -8,6 +8,16 @@ Publique `index.html`, `app.js`, `manifest.webmanifest` e os ícones na raiz do 
 
 ## Release Notes
 
+### v1.6.1 — 12/10/2026
+- **Fixed:** preservação da atividade efetivamente realizada ao confirmar novamente uma substituição; reprogramação conserva PT, horários e observações.
+- **Fixed:** filtros do histórico por datas da atividade (`scheduled_date`/`completed_date`), com intervalos de calendário; ordenação decrescente por semana.
+- **Fixed:** recuperação e treino mutuamente exclusivos no mesmo dia, tanto na inclusão quanto na reprogramação.
+- **Changed:** ícone 🕘 para consultar a atividade substituída, separado do botão 🔄 de substituir.
+- **Added:** aba Configurações; seletor de histórico de amigos; Reiniciar semana com confirmação e bloqueio para semanas anteriores.
+- **Changed:** ordem dos indicadores: Meta de dias, Atividades concluídas, Dias concluídos, Resultado.
+- **No database migration required** após v1.5.0.
+
+
 ### v1.6.0 — 12/10/2026
 - **Added:** abas Plano Semanal, Histórico e Atividades; filtros do histórico; recuperação como opção do dia.
 - **Changed:** interface em português brasileiro; notificações temporárias no topo; PT como atributo; substituições indicadas por ícone; resumo com “Concluído” e “Histórico”.
@@ -34,7 +44,9 @@ Publique `index.html`, `app.js`, `manifest.webmanifest` e os ícones na raiz do 
 ## Limitações conhecidas
 - Recuperações antigas registradas como atividade permanecem no histórico; podem exigir limpeza manual.
 - A sincronização depende de conexão à Internet; não há fila offline.
-- O histórico personalizado filtra pela semana inicial.
+- Filtros por períodos parciais agrupam atividades por semana; a meta exibida é a meta da semana completa.
+- Reiniciar semana apaga permanentemente os registros com data planejada naquela semana, inclusive os resultados; registros originados em outras semanas não são excluídos.
+- O histórico de amigos depende das políticas RLS de leitura entre amizades aceitas.
 - O acesso entre amigos e as políticas RLS precisam de teste em duas contas antes de utilização real.
 
 ## Roadmap
