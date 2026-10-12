@@ -1,3 +1,22 @@
+# FitPact 1.6.2 — Release Notes
+
+## Correções
+- Configurações exclusivamente pessoais: removido o seletor «Ver: Eu»; amigos apenas no Histórico.
+- Plano Semanal, biblioteca e compartilhamento usam sempre a conta autenticada, independentemente do amigo selecionado no Histórico.
+- Conclusão de exercícios substituídos preserva a atividade efetivamente realizada, inclusive em nova conclusão.
+- Reprogramação de atividade substituída preserva a substituição e os atributos PT, horário e observações.
+- Filtros de Histórico usam a data da atividade (data de conclusão para concluídas, data planejada para as demais), sem depender da data de criação. Intervalos de meses tratados com calendário local.
+- Repetir semana anterior bloqueado em semanas passadas, inclusive com verificação no momento do clique.
+
+## Instalação
+Substitua os arquivos do repositório GitHub Pages pelos deste ZIP. Não há nova migração SQL, desde que a migração da v1.5.0 já tenha sido aplicada.
+
+## Problemas conhecidos / validação pendente
+- Ainda é necessário validar as correções com dados reais no Supabase, especialmente os filtros por período e as substituições.
+- Em semanas parcialmente abrangidas pelo filtro, o indicador de meta semanal reflete a semana inteira, enquanto os totais de atividades e dias refletem apenas o intervalo filtrado.
+- A repetição de semanas pode gerar registros duplicados se executada várias vezes; verificar antes de repetir.
+- Não há service worker para uso totalmente offline.
+
 # FitPact
 
 PWA para planejamento semanal de exercícios, acompanhamento entre amigos e compartilhamento pelo WhatsApp.
