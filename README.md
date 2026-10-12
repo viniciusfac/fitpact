@@ -1,3 +1,32 @@
+# FitPact 1.7.1 — Atualização corretiva
+
+## Instalação
+1. Faça backup do projeto Supabase antes de qualquer migração.
+2. Com a migração v1.7.0 já aplicada, execute `migration_v1_7_1.sql` no SQL Editor do Supabase.
+3. Publique `index.html`, `app.js`, `manifest.webmanifest` e os ícones no GitHub Pages.
+4. Feche e reabra a PWA instalada (se necessário, reinstale para atualizar o nome exibido).
+5. Valide com duas contas reais, especialmente recuperação de senha, remoção bilateral, reativação e políticas RLS.
+
+## Novidades
+- FP-14/15: fluxo de recuperação com listener registrado antes da sessão; notificação de solicitação já presente.
+- FP-16: troféus e medalhas mantidos, aguardando teste real.
+- FP-17: converter recuperação em treino extra sem elevar a meta (campo `extra_workout`).
+- FP-18: versão 1.7.1 no título, HTML e manifesto.
+- FP-19: nomes dos amigos na gestão, evitando IDs na interface.
+- FP-20/21/27: histórico unificado de reações, incentivos, respostas, com data/hora.
+- FP-22: código de convite preservado no primeiro acesso usando sessionStorage.
+- FP-23: filtro por amigo no feed e nas interações.
+- FP-24: gestão de convites e amizades em Configurações.
+- FP-25: permitir/silenciar incentivos individualmente, aplicado no banco.
+- FP-26: remoção bilateral lógica, aviso ao removido e reativação mediante nova aceitação.
+
+## Observações
+- Interações antigas com resposta anterior à migração não possuem data exata da resposta; usa-se a data original como fallback.
+- As notificações são internas, não são push.
+- A migração depende da estrutura e das funções da versão 1.7.0; valide no Supabase antes de disponibilizar a terceiros.
+
+---
+
 # FitPact 1.7.0 — FitPact Social
 
 ## Release Notes (12/10/2026)
@@ -147,3 +176,6 @@ No Supabase Authentication → URL Configuration, verifique que `https://viniciu
 - O compartilhamento nativo depende de suporte do navegador e de contexto HTTPS; há opção de copiar e fallback para WhatsApp.
 - A proteção contra nomes duplicados é feita na aplicação. Para garantir unicidade mesmo em gravações simultâneas feitas por dispositivos diferentes, é recomendável uma restrição adicional no banco de dados.
 - A validação com múltiplos usuários e navegadores ainda deve ser realizada.
+
+
+Migração 1.7.0 corrigida: idempotência das políticas; se a execução anterior falhou, execute migration_v1_7_0.sql corrigida e depois migration_v1_7_1.sql.
