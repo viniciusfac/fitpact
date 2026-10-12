@@ -1,3 +1,21 @@
+# FitPact 1.6.3 — Release Notes
+
+## Melhorias no compartilhamento
+- Copiar resumo e Compartilhar pelo WhatsApp utilizam a mesma função e o mesmo formato.
+- Dias mostram apenas emojis de atividades, indicador de PT 👤 e status.
+- Histórico aparece imediatamente abaixo de Dias concluídos, antes da lista de dias.
+- Dias concluídos: um 🏆 por dia até a meta e uma 🥇 por dia adicional acima da meta. Sem dias concluídos, mostra —.
+- Legenda dinâmica ao final, com cada atividade da semana uma única vez; 👤 explicado apenas quando utilizado.
+- Datas do resumo em formato brasileiro.
+- Nenhuma alteração no banco de dados.
+
+## Problemas conhecidos
+- Treinos concluídos em data diferente da planejada aparecem na linha do dia planejado no resumo; contagem de dias concluídos considera a data efetiva.
+- O resumo pode ficar longo em semanas com muitas atividades e um histórico extenso.
+- Consulte também os problemas conhecidos das versões anteriores abaixo.
+
+---
+
 # FitPact 1.6.2 — Release Notes
 
 ## Correções
