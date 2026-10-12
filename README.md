@@ -1,4 +1,30 @@
-# FitPact 1.6.3 — Release Notes
+# FitPact 1.7.0 — FitPact Social
+
+## Release Notes (12/10/2026)
+- Nova aba **Amigos**: feed com os últimos treinos concluídos dos amigos aceitos e conquistas da meta semanal.
+- Reações 👏 🔥 💪 🏆 para treinos concluídos e semanas com meta atingida. Cada usuário pode atualizar sua reação.
+- Incentivos 💪, 🤝, 👀 e 🏃, com limite de um por amigo a cada 24 horas (também aplicado no Supabase).
+- Caixa de incentivos recebidos, respostas rápidas e marcação de leitura; reações recebidas também são apresentadas.
+- Em Configurações, opção para desativar o recebimento de incentivos.
+- O banco só autoriza interações entre amizades aceitas; as tabelas têm RLS.
+
+## Instalação — atenção à ordem
+1. Faça backup do projeto Supabase e execute **migration_v1_7_0.sql** no **SQL Editor**. Este passo é obrigatório e deve ocorrer **antes** de publicar a aplicação.
+2. Envie os arquivos de aplicação deste ZIP para a raiz do repositório GitHub Pages.
+3. Atualize a página e entre na aba **Amigos**.
+4. Teste com duas contas já vinculadas por amizade aceita.
+
+## Problemas conhecidos / limites
+- As notificações são exibidas dentro da aplicação; **não** há notificações push nem e-mails de incentivo.
+- A sincronização utiliza a atualização periódica existente (~30 segundos), não tempo real por websocket.
+- A interface mostra até cinco treinos recentes por amigo e limita o histórico de interações carregado; não há paginação.
+- Não há chat livre; apenas quatro respostas rápidas.
+- A limitação de incentivo é por remetente e destinatário, não por tipo de mensagem.
+- O banco deve estar com a migração v1.5.0 já aplicada.
+
+---
+
+# FitPact 1.6.4 — Release Notes
 
 ## Melhorias no compartilhamento
 - Copiar resumo e Compartilhar pelo WhatsApp utilizam a mesma função e o mesmo formato.
@@ -89,3 +115,35 @@ Publique `index.html`, `app.js`, `manifest.webmanifest` e os ícones na raiz do 
 ## Roadmap
 - Sincronização offline e notificações de mudanças entre amigos.
 - Melhoria de reagendamento com seletor visual de datas.
+
+
+## Release Notes — v1.6.4 (12/10/2026)
+
+- Incluído **Esqueci minha senha** na tela de entrada, enviando link de recuperação via Supabase Auth.
+- Adicionada tela de redefinição de senha com confirmação e validação básica.
+- Em Copiar resumo / WhatsApp, o histórico não inclui a semana selecionada e apresenta as semanas anteriores da mais antiga para a mais recente.
+- Removidas ampulhetas dos exercícios ainda não concluídos no resumo compartilhado.
+- Dias concluídos igual a zero mostra `0`; valores positivos seguem a regra de 🏆 até a meta e 🥇 acima da meta.
+
+### Configuração necessária para recuperação de senha
+
+No Supabase Authentication → URL Configuration, verifique que `https://viniciusfac.github.io/fitpact/` consta como Site URL ou Redirect URL permitido. O e-mail de recuperação depende da entrega de e-mails pelo Supabase (e de limites de envio do projeto).
+
+### Limitações conhecidas
+
+- Recuperação de senha requer internet e acesso ao e-mail cadastrado.
+- Fluxo de recuperação e e-mail ainda precisam de teste ponta a ponta no ambiente publicado.
+- Histórico compartilhado considera as últimas 25 semanas com registros anteriores à semana selecionada.
+
+## Release Notes — v1.6.5 (12/10/2026)
+- A seleção para substituir uma atividade não apresenta a atividade atual (nem outra atividade com o mesmo nome).
+- Recuperação não apresenta ampulheta no Plano Semanal.
+- Em Configurações, é possível compartilhar ou copiar um convite com apresentação do FitPact, link da aplicação e código de amizade.
+- Links `?amigo=UUID` preenchem o campo de convite; o usuário precisa confirmar o envio, sem associação automática.
+- A biblioteca impede excluir atividades já associadas a treinos (inclusive registros históricos) e impede criar nomes duplicados, ignorando diferenças de maiúsculas e espaços.
+- Não é necessária migração SQL para atualizar da v1.6.4.
+
+### Problemas conhecidos / observações
+- O compartilhamento nativo depende de suporte do navegador e de contexto HTTPS; há opção de copiar e fallback para WhatsApp.
+- A proteção contra nomes duplicados é feita na aplicação. Para garantir unicidade mesmo em gravações simultâneas feitas por dispositivos diferentes, é recomendável uma restrição adicional no banco de dados.
+- A validação com múltiplos usuários e navegadores ainda deve ser realizada.
