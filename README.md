@@ -179,3 +179,13 @@ No Supabase Authentication → URL Configuration, verifique que `https://viniciu
 
 
 Migração 1.7.0 corrigida: idempotência das políticas; se a execução anterior falhou, execute migration_v1_7_0.sql corrigida e depois migration_v1_7_1.sql.
+
+
+## v1.7.2 — Ajustes (2026-10-18)
+- FP-28: edição de descrição e estado ativo/inativo na biblioteca de atividades. Atividades inativas preservadas no histórico, excluídas das novas seleções.
+- FP-29: edição de observação em dias de recuperação.
+- FP-30: observações incluídas no resumo copiado e compartilhado.
+- FP-31: histórico compartilhado inclui a semana corrente aos domingos, apenas quando é a semana selecionada.
+- FP-32: celebração visual uma vez por semana quando a meta é atingida ao concluir um treino.
+
+Instalação: executar migration_v1_7_2.sql no Supabase antes de publicar os arquivos. Manter migrações anteriores aplicadas.
