@@ -1,207 +1,174 @@
-# FitPact 1.7.1 — Atualização corretiva
+# FitPact 🏆
 
-## Instalação
-1. Faça backup do projeto Supabase antes de qualquer migração.
-2. Com a migração v1.7.0 já aplicada, execute `migration_v1_7_1.sql` no SQL Editor do Supabase.
-3. Publique `index.html`, `app.js`, `manifest.webmanifest` e os ícones no GitHub Pages.
-4. Feche e reabra a PWA instalada (se necessário, reinstale para atualizar o nome exibido).
-5. Valide com duas contas reais, especialmente recuperação de senha, remoção bilateral, reativação e políticas RLS.
+**Versão atual: 1.7.4 · 18/10/2026**  
+**Slogan:** O compromisso é contigo.
 
-## Novidades
-- FP-14/15: fluxo de recuperação com listener registrado antes da sessão; notificação de solicitação já presente.
-- FP-16: troféus e medalhas mantidos, aguardando teste real.
-- FP-17: converter recuperação em treino extra sem elevar a meta (campo `extra_workout`).
-- FP-18: versão 1.7.1 no título, HTML e manifesto.
-- FP-19: nomes dos amigos na gestão, evitando IDs na interface.
-- FP-20/21/27: histórico unificado de reações, incentivos, respostas, com data/hora.
-- FP-22: código de convite preservado no primeiro acesso usando sessionStorage.
-- FP-23: filtro por amigo no feed e nas interações.
-- FP-24: gestão de convites e amizades em Configurações.
-- FP-25: permitir/silenciar incentivos individualmente, aplicado no banco.
-- FP-26: remoção bilateral lógica, aviso ao removido e reativação mediante nova aceitação.
+FitPact é uma aplicação web progressiva (PWA), em português brasileiro, para organizar treinos semanais, acompanhar metas e compartilhar a evolução com amigos. Funciona no navegador e pode ser instalada na tela inicial do celular ou no computador.
 
-## Observações
-- Interações antigas com resposta anterior à migração não possuem data exata da resposta; usa-se a data original como fallback.
-- As notificações são internas, não são push.
-- A migração depende da estrutura e das funções da versão 1.7.0; valide no Supabase antes de disponibilizar a terceiros.
+**Aplicação:** https://viniciusfac.github.io/fitpact/  
+**Repositório:** https://github.com/viniciusfac/fitpact
 
----
+## Funcionalidades
 
-# FitPact 1.7.0 — FitPact Social
+- **Plano Semanal:** planejamento por dia, exercícios, horários opcionais, observações, indicação de personal trainer (👤), recuperação e reagendamento.
+- **Metas:** a meta corresponde aos dias planejados com treino; recuperação não conta e treinos extras não aumentam a meta. Indicadores de meta, atividades concluídas e dias concluídos.
+- **Estados dos treinos:** concluído (✅), não realizado (❌) e pendente; um segundo clique no estado marcado desfaz a ação.
+- **Substituições:** registra a atividade realizada sem perder a referência à atividade planejada; ao substituir, a observação antiga é limpa.
+- **Biblioteca de atividades:** cadastro, edição de nome, ícone e descrição; ativação/desativação sem apagar registros antigos; proteção contra exclusão de atividades em uso.
+- **Histórico:** filtros por período, resultados semanais, visualização de amigos autorizados e indicadores de evolução.
+- **Compartilhamento:** resumo por cópia ou WhatsApp, com emojis, observações, troféus 🏆 e medalhas 🥇 para dias acima da meta.
+- **Amigos:** convites, feed de treinos, reações, incentivos, respostas, filtros e notificações internas; remoção bilateral e reativação mediante novo convite.
+- **Conta:** autenticação pelo Supabase, nome de exibição e recuperação de senha por e-mail.
+- **Conquistas:** comemoração visual ao atingir a meta de cada semana, inclusive semanas preenchidas antecipadamente.
 
-## Release Notes (12/10/2026)
-- Nova aba **Amigos**: feed com os últimos treinos concluídos dos amigos aceitos e conquistas da meta semanal.
-- Reações 👏 🔥 💪 🏆 para treinos concluídos e semanas com meta atingida. Cada usuário pode atualizar sua reação.
-- Incentivos 💪, 🤝, 👀 e 🏃, com limite de um por amigo a cada 24 horas (também aplicado no Supabase).
-- Caixa de incentivos recebidos, respostas rápidas e marcação de leitura; reações recebidas também são apresentadas.
-- Em Configurações, opção para desativar o recebimento de incentivos.
-- O banco só autoriza interações entre amizades aceitas; as tabelas têm RLS.
+## Instalação e atualização
 
-## Instalação — atenção à ordem
-1. Faça backup do projeto Supabase e execute **migration_v1_7_0.sql** no **SQL Editor**. Este passo é obrigatório e deve ocorrer **antes** de publicar a aplicação.
-2. Envie os arquivos de aplicação deste ZIP para a raiz do repositório GitHub Pages.
-3. Atualize a página e entre na aba **Amigos**.
-4. Teste com duas contas já vinculadas por amizade aceita.
+1. Faça backup dos dados e da configuração do projeto no **Supabase** antes de executar migrações.
+2. Para uma instalação que já utiliza a **v1.7.3**, publique os arquivos da **v1.7.4** na raiz do repositório GitHub Pages: `index.html`, `app.js`, `manifest.webmanifest` e ícones. **Não há nova migração SQL para a v1.7.4.**
+3. Para atualizar a partir de uma versão anterior, verifique e aplique, **na ordem**, as migrações que ainda faltarem: `migration_v1_7_0.sql`, `migration_v1_7_1.sql` e `migration_v1_7_2.sql`. A migração 1.7.0 incluída no pacote foi corrigida para evitar conflito de políticas já existentes. As migrações pressupõem o esquema base de versões anteriores, incluindo 1.5.0.
+4. No **Supabase Authentication → URL Configuration**, configure a URL do aplicativo como URL permitida para redirecionamento de autenticação e recuperação de senha.
+5. Aguarde a publicação do GitHub Pages, recarregue a página e, se a PWA instalada continuar exibindo uma versão antiga, feche e reabra a aplicação.
+6. Valide os fluxos principais com duas contas de teste antes de liberar alterações a outros usuários.
 
-## Problemas conhecidos / limites
-- As notificações são exibidas dentro da aplicação; **não** há notificações push nem e-mails de incentivo.
-- A sincronização utiliza a atualização periódica existente (~30 segundos), não tempo real por websocket.
-- A interface mostra até cinco treinos recentes por amigo e limita o histórico de interações carregado; não há paginação.
-- Não há chat livre; apenas quatro respostas rápidas.
-- A limitação de incentivo é por remetente e destinatário, não por tipo de mensagem.
-- O banco deve estar com a migração v1.5.0 já aplicada.
+> **Importante:** a atualização dos arquivos do GitHub não executa migrações SQL automaticamente. A aplicação requer conexão com a internet para sincronizar com o Supabase.
 
----
+## Histórico de versões (release notes)
 
-# FitPact 1.6.4 — Release Notes
+### v1.7.4 — 18/10/2026
 
-## Melhorias no compartilhamento
-- Copiar resumo e Compartilhar pelo WhatsApp utilizam a mesma função e o mesmo formato.
-- Dias mostram apenas emojis de atividades, indicador de PT 👤 e status.
-- Histórico aparece imediatamente abaixo de Dias concluídos, antes da lista de dias.
-- Dias concluídos: um 🏆 por dia até a meta e uma 🥇 por dia adicional acima da meta. Sem dias concluídos, mostra —.
-- Legenda dinâmica ao final, com cada atividade da semana uma única vez; 👤 explicado apenas quando utilizado.
-- Datas do resumo em formato brasileiro.
-- Nenhuma alteração no banco de dados.
+- **FP-35 · Correção:** o botão **Cancelar** do editor de atividades fecha a janela sem validar campos obrigatórios e sem salvar alterações, mesmo que nome ou ícone tenham sido apagados durante a edição.
+- **FP-36 · Correção:** a comemoração de meta atingida passa a funcionar também para **semanas futuras preenchidas antecipadamente** e semanas anteriores, respeitando o controle de uma celebração por usuário e por semana.
+- **FP-37 · Melhoria:** solicitações de amizade recebidas passam a mostrar o **nome do remetente**, quando disponível, em vez de apenas uma indicação genérica de solicitação.
+- **Banco de dados:** nenhuma migração adicional.
+- **Validação:** correções entregues; aguardam teste funcional após a instalação da v1.7.4.
 
-## Problemas conhecidos
-- Treinos concluídos em data diferente da planejada aparecem na linha do dia planejado no resumo; contagem de dias concluídos considera a data efetiva.
-- O resumo pode ficar longo em semanas com muitas atividades e um histórico extenso.
-- Consulte também os problemas conhecidos das versões anteriores abaixo.
+### v1.7.3 — 18/10/2026
 
----
+- **FP-28 · Melhoria:** editor completo de atividades, com nome, ícone, descrição, opção de contar para a meta e estado ativo/inativo.
+- **FP-28 · Melhoria:** controle de ativação diretamente na lista de atividades; atividades inativas deixam de aparecer em novos planejamentos e substituições, mas permanecem no histórico.
+- **FP-33 · Melhoria:** clicar novamente em **Concluído** ou **Não realizado** devolve o treino ao estado pendente e atualiza os indicadores.
+- **FP-34 · Correção:** observações anteriores são apagadas ao substituir exercício ou converter recuperação em treino extra.
+- **FP-32 · Ajuste:** manutenção do efeito de comemoração ao atingir a meta semanal.
+- **Banco de dados:** nenhuma migração adicional.
+- **Validação (Teste 13):** dez verificações aprovadas. Foram identificados posteriormente os problemas FP-35 e FP-36, corrigidos na 1.7.4. Remoção bilateral, notificação e reativação de amizade foram validadas em teste complementar.
 
-# FitPact 1.6.2 — Release Notes
+### v1.7.2 — 18/10/2026
 
-## Correções
-- Configurações exclusivamente pessoais: removido o seletor «Ver: Eu»; amigos apenas no Histórico.
-- Plano Semanal, biblioteca e compartilhamento usam sempre a conta autenticada, independentemente do amigo selecionado no Histórico.
-- Conclusão de exercícios substituídos preserva a atividade efetivamente realizada, inclusive em nova conclusão.
-- Reprogramação de atividade substituída preserva a substituição e os atributos PT, horário e observações.
-- Filtros de Histórico usam a data da atividade (data de conclusão para concluídas, data planejada para as demais), sem depender da data de criação. Intervalos de meses tratados com calendário local.
-- Repetir semana anterior bloqueado em semanas passadas, inclusive com verificação no momento do clique.
+- **FP-28 · Adição:** descrição e estado ativo/inativo nas atividades; atividades inativas preservadas no histórico e excluídas das novas escolhas.
+- **FP-29 · Adição:** observações em dias de recuperação.
+- **FP-30 · Melhoria:** observações de treinos e recuperação incluídas no resumo copiado e compartilhado pelo WhatsApp.
+- **FP-31 · Ajuste:** inclusão da semana atual no histórico compartilhado quando a consulta ocorre no domingo.
+- **FP-32 · Adição:** comemoração visual ao atingir a meta semanal.
+- **Banco de dados:** executar `migration_v1_7_2.sql` para acrescentar os campos de descrição e ativação de atividades.
+- **Validação (Teste 12):** observações, compartilhamento e histórico aprovados; edição de atividades e celebração exigiram ajustes posteriores.
 
-## Instalação
-Substitua os arquivos do repositório GitHub Pages pelos deste ZIP. Não há nova migração SQL, desde que a migração da v1.5.0 já tenha sido aplicada.
+### v1.7.1 — 12/10/2026
 
-## Problemas conhecidos / validação pendente
-- Ainda é necessário validar as correções com dados reais no Supabase, especialmente os filtros por período e as substituições.
-- Em semanas parcialmente abrangidas pelo filtro, o indicador de meta semanal reflete a semana inteira, enquanto os totais de atividades e dias refletem apenas o intervalo filtrado.
-- A repetição de semanas pode gerar registros duplicados se executada várias vezes; verificar antes de repetir.
-- Não há service worker para uso totalmente offline.
+- **FP-14/15 · Correção:** fluxo de redefinição de senha por e-mail e confirmação visual da solicitação.
+- **FP-16 · Ajuste:** troféus 🏆 até a meta e medalhas 🥇 para dias concluídos além da meta.
+- **FP-17 · Adição:** substituição de recuperação por treino extra, sem aumentar a meta semanal (`extra_workout`).
+- **FP-18 · Correção:** versão atualizada no título, na interface e no manifesto.
+- **FP-19 · Melhoria:** nomes de amigos em vez de identificadores técnicos.
+- **FP-20/21/27 · Melhoria:** histórico social com reações, incentivos, respostas, datas e horários.
+- **FP-22 · Correção:** preservação do código de convite recebido pelo link durante o primeiro acesso.
+- **FP-23 · Adição:** filtro por amigo no feed e nas interações.
+- **FP-24 · Adição:** gestão de convites e amizades nas Configurações.
+- **FP-25 · Adição:** opção para silenciar incentivos individualmente por amigo.
+- **FP-26 · Adição:** remoção bilateral lógica, aviso ao amigo removido e reativação mediante novo convite; dados históricos preservados.
+- **Banco de dados:** executar `migration_v1_7_1.sql` após a 1.7.0.
+- **Validação (Teste 11):** 11 verificações aprovadas e três inicialmente pendentes, depois aprovadas no teste complementar realizado durante a 1.7.3.
 
-# FitPact
+### v1.7.0 — 12/10/2026 · FitPact Social
 
-PWA para planejamento semanal de exercícios, acompanhamento entre amigos e compartilhamento pelo WhatsApp.
+- Nova aba **Amigos**, com feed de treinos concluídos e conquistas semanais.
+- Reações 👏 🔥 💪 🏆 a atividades e conquistas.
+- Incentivos entre amigos, com limite de um por destinatário a cada 24 horas.
+- Respostas rápidas, caixa de incentivos e marcação de leitura.
+- Opção global de desativar incentivos.
+- Políticas de segurança RLS para permitir interações somente entre amizades aceitas.
+- **Banco de dados:** `migration_v1_7_0.sql`. Utilizar a versão corrigida e idempotente fornecida no pacote atualizado.
 
-## Instalação
+### v1.6.5 — 12/10/2026
 
-Publique `index.html`, `app.js`, `manifest.webmanifest` e os ícones na raiz do GitHub Pages. Configure a URL do site e de redirecionamento no Supabase Authentication. A versão 1.6.0 utiliza a estrutura de banco já migrada para a 1.5.0.
+- Lista de substituição deixa de oferecer a própria atividade atual.
+- Recuperação não exibe ampulheta no Plano Semanal.
+- Convite compartilhável com apresentação do aplicativo, link e código de amizade.
+- Link `?amigo=UUID` preenche o código de convite, sujeito à confirmação do usuário.
+- Proteção contra exclusão de atividades vinculadas a treinos e contra nomes duplicados.
+- **Banco de dados:** nenhuma migração adicional.
 
-## Release Notes
+### v1.6.4 — 12/10/2026
+
+- Recuperação de senha por e-mail e tela de definição de nova senha.
+- Copiar resumo e WhatsApp utilizam o mesmo formato.
+- Histórico no resumo ordenado cronologicamente; semana selecionada excluída conforme regra da versão.
+- Remoção das ampulhetas de atividades pendentes no resumo compartilhado.
+- Exibição de `0` quando não há dias concluídos; troféus e medalhas quando aplicável.
+- **Banco de dados:** nenhuma migração adicional.
+
+### v1.6.2 — 12/10/2026
+
+- Configurações pessoais, sem seletor redundante de usuário.
+- Correções na preservação de atividades substituídas, PT, horários e observações durante reagendamento.
+- Correções nos filtros de Histórico, datas efetivas e ordenação das semanas.
+- Bloqueio de repetição da semana anterior em semanas passadas.
+- **Banco de dados:** nenhuma migração adicional após a 1.5.0.
 
 ### v1.6.1 — 12/10/2026
-- **Fixed:** preservação da atividade efetivamente realizada ao confirmar novamente uma substituição; reprogramação conserva PT, horários e observações.
-- **Fixed:** filtros do histórico por datas da atividade (`scheduled_date`/`completed_date`), com intervalos de calendário; ordenação decrescente por semana.
-- **Fixed:** recuperação e treino mutuamente exclusivos no mesmo dia, tanto na inclusão quanto na reprogramação.
-- **Changed:** ícone 🕘 para consultar a atividade substituída, separado do botão 🔄 de substituir.
-- **Added:** aba Configurações; seletor de histórico de amigos; Reiniciar semana com confirmação e bloqueio para semanas anteriores.
-- **Changed:** ordem dos indicadores: Meta de dias, Atividades concluídas, Dias concluídos, Resultado.
-- **No database migration required** após v1.5.0.
 
+- Preservação da atividade efetivamente realizada após confirmação de substituição.
+- Filtros do histórico por data da atividade, com intervalos de calendário.
+- Exclusividade entre recuperação e treino no mesmo dia.
+- Ícone separado para consultar a atividade substituída.
+- Aba Configurações, seleção de histórico de amigos e confirmação para reiniciar semana.
+- Ordem dos indicadores: meta de dias, atividades concluídas, dias concluídos e resultado.
 
 ### v1.6.0 — 12/10/2026
-- **Added:** abas Plano Semanal, Histórico e Atividades; filtros do histórico; recuperação como opção do dia.
-- **Changed:** interface em português brasileiro; notificações temporárias no topo; PT como atributo; substituições indicadas por ícone; resumo com “Concluído” e “Histórico”.
-- **Fixed:** estatísticas filtradas pelo usuário selecionado; botão Atualizar removido.
-- **Security:** permissões e políticas RLS devem continuar configuradas e testadas no Supabase.
+
+- Abas Plano Semanal, Histórico e Atividades.
+- Filtros de histórico e recuperação como estado do dia.
+- Interface em português brasileiro, notificações temporárias e PT como atributo.
+- Resumo semanal e indicadores de conclusão.
 
 ### v1.5.0
-- **Added:** horários opcionais, observações e indicador de personal trainer.
-- **Changed:** meta calculada a partir dos dias com treinos planejados.
+
+- Horários opcionais, observações e indicador de personal trainer.
+- Meta semanal calculada a partir dos dias planejados com treino.
 
 ### v1.4.3
-- **Fixed:** validação da URL do Supabase.
+
+- Correção da validação da URL do Supabase.
 
 ### v1.4.2
-- **Added:** ícones e versão no cabeçalho.
-- **Fixed:** feedback de inicialização.
+
+- Ícones e versão no cabeçalho; melhorias no feedback de inicialização.
 
 ### v1.4.1
-- **Fixed:** carregamento da biblioteca Supabase.
+
+- Correção do carregamento da biblioteca Supabase.
 
 ### v1.4.0
-- **Added:** autenticação, sincronização, amizades e histórico no Supabase.
 
-## Limitações conhecidas
-- Recuperações antigas registradas como atividade permanecem no histórico; podem exigir limpeza manual.
-- A sincronização depende de conexão à Internet; não há fila offline.
-- Filtros por períodos parciais agrupam atividades por semana; a meta exibida é a meta da semana completa.
-- Reiniciar semana apaga permanentemente os registros com data planejada naquela semana, inclusive os resultados; registros originados em outras semanas não são excluídos.
-- O histórico de amigos depende das políticas RLS de leitura entre amizades aceitas.
-- O acesso entre amigos e as políticas RLS precisam de teste em duas contas antes de utilização real.
+- Autenticação, sincronização, amizades e histórico no Supabase.
 
-## Roadmap
-- Sincronização offline e notificações de mudanças entre amigos.
-- Melhoria de reagendamento com seletor visual de datas.
+## Testes e estado da versão
 
+- **Aprovados:** edição e ativação de atividades (v1.7.3), desfazer estados de treinos, limpeza de observações, recuperação de senha, metas e treinos extras, filtros sociais, remoção bilateral de amigos, notificação de remoção e restauração do histórico após novo convite.
+- **A validar na v1.7.4:** cancelamento da edição com campos vazios, comemoração em semanas diferentes (incluindo futuras) e identificação do remetente em convites recebidos.
+- **Segurança:** as regras RLS devem permanecer ativas no Supabase; testes de interface não substituem uma auditoria de permissões.
 
-## Release Notes — v1.6.4 (12/10/2026)
+## Limitações e observações
 
-- Incluído **Esqueci minha senha** na tela de entrada, enviando link de recuperação via Supabase Auth.
-- Adicionada tela de redefinição de senha com confirmação e validação básica.
-- Em Copiar resumo / WhatsApp, o histórico não inclui a semana selecionada e apresenta as semanas anteriores da mais antiga para a mais recente.
-- Removidas ampulhetas dos exercícios ainda não concluídos no resumo compartilhado.
-- Dias concluídos igual a zero mostra `0`; valores positivos seguem a regra de 🏆 até a meta e 🥇 acima da meta.
+- A sincronização requer internet; não há fila de gravação offline.
+- As notificações sociais são **internas à aplicação**, não notificações push.
+- A atualização de atividades sociais pode depender de atualização periódica, não de websocket em tempo real.
+- O histórico compartilhado pode ser extenso em semanas com muitas atividades.
+- Filtros por períodos parciais podem mostrar a meta da semana completa.
+- O recurso **Reiniciar semana** remove registros planejados naquela semana; confirme antes de utilizar.
+- As políticas de acesso aos dados dos amigos dependem das configurações de segurança do Supabase.
 
-### Configuração necessária para recuperação de senha
+## Próximos passos
 
-No Supabase Authentication → URL Configuration, verifique que `https://viniciusfac.github.io/fitpact/` consta como Site URL ou Redirect URL permitido. O e-mail de recuperação depende da entrega de e-mails pelo Supabase (e de limites de envio do projeto).
-
-### Limitações conhecidas
-
-- Recuperação de senha requer internet e acesso ao e-mail cadastrado.
-- Fluxo de recuperação e e-mail ainda precisam de teste ponta a ponta no ambiente publicado.
-- Histórico compartilhado considera as últimas 25 semanas com registros anteriores à semana selecionada.
-
-## Release Notes — v1.6.5 (12/10/2026)
-- A seleção para substituir uma atividade não apresenta a atividade atual (nem outra atividade com o mesmo nome).
-- Recuperação não apresenta ampulheta no Plano Semanal.
-- Em Configurações, é possível compartilhar ou copiar um convite com apresentação do FitPact, link da aplicação e código de amizade.
-- Links `?amigo=UUID` preenchem o campo de convite; o usuário precisa confirmar o envio, sem associação automática.
-- A biblioteca impede excluir atividades já associadas a treinos (inclusive registros históricos) e impede criar nomes duplicados, ignorando diferenças de maiúsculas e espaços.
-- Não é necessária migração SQL para atualizar da v1.6.4.
-
-### Problemas conhecidos / observações
-- O compartilhamento nativo depende de suporte do navegador e de contexto HTTPS; há opção de copiar e fallback para WhatsApp.
-- A proteção contra nomes duplicados é feita na aplicação. Para garantir unicidade mesmo em gravações simultâneas feitas por dispositivos diferentes, é recomendável uma restrição adicional no banco de dados.
-- A validação com múltiplos usuários e navegadores ainda deve ser realizada.
-
-
-Migração 1.7.0 corrigida: idempotência das políticas; se a execução anterior falhou, execute migration_v1_7_0.sql corrigida e depois migration_v1_7_1.sql.
-
-
-## v1.7.2 — Ajustes (2026-10-18)
-- FP-28: edição de descrição e estado ativo/inativo na biblioteca de atividades. Atividades inativas preservadas no histórico, excluídas das novas seleções.
-- FP-29: edição de observação em dias de recuperação.
-- FP-30: observações incluídas no resumo copiado e compartilhado.
-- FP-31: histórico compartilhado inclui a semana corrente aos domingos, apenas quando é a semana selecionada.
-- FP-32: celebração visual uma vez por semana quando a meta é atingida ao concluir um treino.
-
-Instalação: executar migration_v1_7_2.sql no Supabase antes de publicar os arquivos. Manter migrações anteriores aplicadas.
-
-
-## 1.7.3 — Correções dos Testes 11 e 12
-- Editor de atividades com ícone, nome, descrição, conta como treino e ativo; check ativo na biblioteca.
-- Desfazer status concluído ou não realizado com segundo clique.
-- Limpar observação ao substituir atividade realizada ou converter recuperação em treino extra.
-- Mantém migrações anteriores; nenhuma migração SQL adicional.
-- Celebração: somente quando o registro de conclusão cruza a meta pela primeira vez; testar numa semana que ainda não atingiu a meta.
-- Pendente: validar remoção bilateral, notificação e reativação da amizade em duas contas.
-
-
-## 1.7.4 — Correções dos Testes 11–13
-- FP-35: Cancelar edição de atividade fecha o formulário sem validação e sem gravar alterações, mesmo com campos obrigatórios vazios.
-- FP-36: comemoração da meta semanal também ocorre ao completar antecipadamente semanas futuras (ou semanas anteriores), uma vez por usuário e semana.
-- FP-37: solicitações de amizade recebidas identificam o remetente pelo nome, na gestão de convites e nas notificações de interação.
-- Nenhuma alteração de esquema SQL nesta versão.
+- Validar as três correções da v1.7.4 com duas contas.
+- Continuar melhorando acessibilidade, experiência móvel e clareza das notificações.
+- Avaliar suporte a sincronização offline e notificações push numa versão futura.
