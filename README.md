@@ -189,3 +189,12 @@ Migração 1.7.0 corrigida: idempotência das políticas; se a execução anteri
 - FP-32: celebração visual uma vez por semana quando a meta é atingida ao concluir um treino.
 
 Instalação: executar migration_v1_7_2.sql no Supabase antes de publicar os arquivos. Manter migrações anteriores aplicadas.
+
+
+## 1.7.3 — Correções dos Testes 11 e 12
+- Editor de atividades com ícone, nome, descrição, conta como treino e ativo; check ativo na biblioteca.
+- Desfazer status concluído ou não realizado com segundo clique.
+- Limpar observação ao substituir atividade realizada ou converter recuperação em treino extra.
+- Mantém migrações anteriores; nenhuma migração SQL adicional.
+- Celebração: somente quando o registro de conclusão cruza a meta pela primeira vez; testar numa semana que ainda não atingiu a meta.
+- Pendente: validar remoção bilateral, notificação e reativação da amizade em duas contas.
