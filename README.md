@@ -198,3 +198,10 @@ Instalação: executar migration_v1_7_2.sql no Supabase antes de publicar os arq
 - Mantém migrações anteriores; nenhuma migração SQL adicional.
 - Celebração: somente quando o registro de conclusão cruza a meta pela primeira vez; testar numa semana que ainda não atingiu a meta.
 - Pendente: validar remoção bilateral, notificação e reativação da amizade em duas contas.
+
+
+## 1.7.4 — Correções dos Testes 11–13
+- FP-35: Cancelar edição de atividade fecha o formulário sem validação e sem gravar alterações, mesmo com campos obrigatórios vazios.
+- FP-36: comemoração da meta semanal também ocorre ao completar antecipadamente semanas futuras (ou semanas anteriores), uma vez por usuário e semana.
+- FP-37: solicitações de amizade recebidas identificam o remetente pelo nome, na gestão de convites e nas notificações de interação.
+- Nenhuma alteração de esquema SQL nesta versão.
