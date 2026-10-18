@@ -189,6 +189,14 @@ function renderSocial(){
   const nudgeLine=element('div','line'),nudge=element('select','grow');for(const [val,txt] of [['encourage','💪 Bora treinar!'],['checkin','🤝 Está tudo bem?'],['playful','👀 Sumiu da academia?'],['together','🏃 Vamos treinar juntos?']]){const o=element('option','',txt);o.value=val;nudge.append(o)}
   nudgeLine.append(nudge,socialButton('Enviar incentivo',()=>sendNudge(id,nudge.value)));card.append(nudgeLine);root.append(card)
  }
+ // Pending requests are actionable directly from the Friends tab, regardless of notification history.
+ const pendingRequests=friends.filter(f=>f.status==='pending'&&f.addressee_id===user.id);
+ if(pendingRequests.length){const requestBox=element('div','social-person');requestBox.append(element('h3','','📨 Solicitações de amizade'));
+  for(const pending of pendingRequests){const line=element('div','line');line.append(element('strong','grow',friendName(pending.requester_id)),
+   socialButton('Aceitar',()=>run(()=>call(client.rpc('fitpact_respond_friend',{friendship_id:pending.id,accept_it:true})))),
+   socialButton('Recusar',()=>run(()=>call(client.rpc('fitpact_respond_friend',{friendship_id:pending.id,accept_it:false})))));requestBox.append(line)}
+  inbox.append(requestBox)
+ }
  const interactions=[];
  for(const r of socialReactions){const incoming=r.recipient_id===user.id,other=incoming?r.sender_id:r.recipient_id;if(!visible.includes(other))continue;interactions.push({date:r.created_at,direction:incoming?'received':'sent',other,text:`${r.emoji} ${incoming?'Reação recebida':'Você reagiu'} · ${r.target_type==='week'?'meta semanal':'treino'}`})}
  const kinds={encourage:'💪 Bora treinar!',checkin:'🤝 Está tudo bem?',playful:'👀 Sumiu da academia?',together:'🏃 Vamos treinar juntos?'};
@@ -206,7 +214,18 @@ function renderSocial(){
   if(x.nudge){const n=x.nudge,sel=element('select','grow');for(const v of ['','🏃 Já estou indo!','📅 Vou amanhã','😅 Semana corrida','🤝 Vamos juntos?']){const o=element('option','',v||'Responder...');o.value=v;sel.append(o)}const line=element('div','line');line.append(sel,socialButton('Responder',()=>{if(sel.value)run(()=>call(client.from('social_nudges').update({reply:sel.value,replied_at:new Date().toISOString(),seen_at:new Date().toISOString()}).eq('id',n.id).eq('recipient_id',user.id)))}));item.append(line);
    if(!n.seen_at)item.append(socialButton('Marcar como lida',()=>run(()=>call(client.from('social_nudges').update({seen_at:new Date().toISOString()}).eq('id',n.id).eq('recipient_id',user.id)))))
   }
-  if(x.event){const ev=friendEvents.find(e=>e.actor_id===x.other&&e.created_at===x.date);if(ev&&!ev.seen_at)item.append(socialButton('Marcar como lida',()=>run(()=>call(client.from('friendship_events').update({seen_at:new Date().toISOString()}).eq('id',ev.id).eq('recipient_id',user.id)))))}
+  if(x.event){
+   const ev=friendEvents.find(e=>e.actor_id===x.other&&e.created_at===x.date);
+   // Only show invitation actions for an invitation that is STILL pending for this user.
+   // Old notification events remain visible, but must not allow duplicate responses.
+   const pending=ev?.event_type==='requested'?friends.find(f=>f.status==='pending'&&f.requester_id===ev.actor_id&&f.addressee_id===user.id):null;
+   if(pending){const actions=element('div','line');actions.append(
+    socialButton('Aceitar',()=>run(()=>call(client.rpc('fitpact_respond_friend',{friendship_id:pending.id,accept_it:true})))),
+    socialButton('Recusar',()=>run(()=>call(client.rpc('fitpact_respond_friend',{friendship_id:pending.id,accept_it:false})))));
+    item.append(actions)
+   }
+   if(ev&&!ev.seen_at)item.append(socialButton('Marcar como lida',()=>run(()=>call(client.from('friendship_events').update({seen_at:new Date().toISOString()}).eq('id',ev.id).eq('recipient_id',user.id)))))
+  }
   inbox.append(item)
  }
 }

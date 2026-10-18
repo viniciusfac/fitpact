@@ -1,6 +1,6 @@
 # FitPact 🏆
 
-**Versão atual: 1.7.5 · 18/10/2026**  
+**Versão atual: 1.7.6 · 18/10/2026**  
 **Slogan:** O compromisso é contigo.
 
 FitPact é uma aplicação web progressiva (PWA), em português brasileiro, para organizar treinos semanais, acompanhar metas e compartilhar a evolução com amigos. Funciona no navegador e pode ser instalada na tela inicial do celular ou no computador.
@@ -19,12 +19,12 @@ FitPact é uma aplicação web progressiva (PWA), em português brasileiro, para
 - **Compartilhamento:** resumo por cópia ou WhatsApp, com emojis, observações, troféus 🏆 e medalhas 🥇 para dias acima da meta.
 - **Amigos:** convites, feed de treinos, reações, incentivos, respostas, filtros e notificações internas; remoção bilateral e reativação mediante novo convite.
 - **Conta:** autenticação pelo Supabase, nome de exibição e recuperação de senha por e-mail.
-- **Conquistas:** comemoração visual ao atingir a meta de cada semana, inclusive semanas preenchidas antecipadamente (correção da v1.7.5 a validar).
+- **Conquistas:** comemoração visual ao atingir a meta de cada semana, inclusive semanas preenchidas antecipadamente (aprovado no teste da v1.7.5).
 
 ## Instalação e atualização
 
 1. Faça backup dos dados e da configuração do projeto no **Supabase** antes de executar migrações.
-2. Para uma instalação que já utiliza a **v1.7.4**, execute `migration_v1_7_5.sql` e publique os arquivos da **v1.7.5** na raiz do repositório GitHub Pages: `index.html`, `app.js`, `manifest.webmanifest` e ícones. **A v1.7.5 exige a migração SQL para identificar remetentes de convites pendentes.**
+2. Para uma instalação que já utiliza a **v1.7.5**, publique os arquivos da **v1.7.6** na raiz do repositório GitHub Pages: `index.html`, `app.js`, `manifest.webmanifest` e ícones. **Nenhuma nova migração SQL é necessária para atualizar da v1.7.5 para a v1.7.6.**
 3. Para atualizar a partir de uma versão anterior, verifique e aplique, **na ordem**, as migrações que ainda faltarem: `migration_v1_7_0.sql`, `migration_v1_7_1.sql`, `migration_v1_7_2.sql` e `migration_v1_7_5.sql`. A migração 1.7.0 incluída no pacote foi corrigida para evitar conflito de políticas já existentes. As migrações pressupõem o esquema base de versões anteriores, incluindo 1.5.0.
 4. No **Supabase Authentication → URL Configuration**, configure a URL do aplicativo como URL permitida para redirecionamento de autenticação e recuperação de senha.
 5. Aguarde a publicação do GitHub Pages, recarregue a página e, se a PWA instalada continuar exibindo uma versão antiga, feche e reabra a aplicação.
@@ -33,6 +33,16 @@ FitPact é uma aplicação web progressiva (PWA), em português brasileiro, para
 > **Importante:** a atualização dos arquivos do GitHub não executa migrações SQL automaticamente. A aplicação requer conexão com a internet para sincronizar com o Supabase.
 
 ## Histórico de versões (release notes)
+
+### v1.7.6 — 18/10/2026
+
+- **FP-38 · Correção:** convites de amizade recebidos exibem **Aceitar** e **Recusar** diretamente na aba Amigos, ao lado do nome de quem enviou o pedido, sem exigir acesso às Configurações.
+- **FP-38 · Correção:** eventos de nova solicitação no histórico de interações também mostram **Aceitar** e **Recusar** enquanto o convite estiver pendente; eventos antigos não apresentam ações indevidas.
+- **Regressão:** preservados os botões existentes em Configurações, os fluxos de convite e o restante das funcionalidades aprovadas.
+- **Banco de dados:** nenhuma migração adicional para quem já executou `migration_v1_7_5.sql`.
+- **Validação:** a comemoração em semanas diferentes e a exibição do nome do remetente foram aprovadas pelo usuário na v1.7.5; os novos botões aguardam teste funcional.
+
+
 
 ### v1.7.5 — 18/10/2026
 
