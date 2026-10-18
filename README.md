@@ -1,6 +1,6 @@
 # FitPact 🏆
 
-**Versão atual: 1.7.4 · 18/10/2026**  
+**Versão atual: 1.7.5 · 18/10/2026**  
 **Slogan:** O compromisso é contigo.
 
 FitPact é uma aplicação web progressiva (PWA), em português brasileiro, para organizar treinos semanais, acompanhar metas e compartilhar a evolução com amigos. Funciona no navegador e pode ser instalada na tela inicial do celular ou no computador.
@@ -19,13 +19,13 @@ FitPact é uma aplicação web progressiva (PWA), em português brasileiro, para
 - **Compartilhamento:** resumo por cópia ou WhatsApp, com emojis, observações, troféus 🏆 e medalhas 🥇 para dias acima da meta.
 - **Amigos:** convites, feed de treinos, reações, incentivos, respostas, filtros e notificações internas; remoção bilateral e reativação mediante novo convite.
 - **Conta:** autenticação pelo Supabase, nome de exibição e recuperação de senha por e-mail.
-- **Conquistas:** comemoração visual ao atingir a meta de cada semana, inclusive semanas preenchidas antecipadamente.
+- **Conquistas:** comemoração visual ao atingir a meta de cada semana, inclusive semanas preenchidas antecipadamente (correção da v1.7.5 a validar).
 
 ## Instalação e atualização
 
 1. Faça backup dos dados e da configuração do projeto no **Supabase** antes de executar migrações.
-2. Para uma instalação que já utiliza a **v1.7.3**, publique os arquivos da **v1.7.4** na raiz do repositório GitHub Pages: `index.html`, `app.js`, `manifest.webmanifest` e ícones. **Não há nova migração SQL para a v1.7.4.**
-3. Para atualizar a partir de uma versão anterior, verifique e aplique, **na ordem**, as migrações que ainda faltarem: `migration_v1_7_0.sql`, `migration_v1_7_1.sql` e `migration_v1_7_2.sql`. A migração 1.7.0 incluída no pacote foi corrigida para evitar conflito de políticas já existentes. As migrações pressupõem o esquema base de versões anteriores, incluindo 1.5.0.
+2. Para uma instalação que já utiliza a **v1.7.4**, execute `migration_v1_7_5.sql` e publique os arquivos da **v1.7.5** na raiz do repositório GitHub Pages: `index.html`, `app.js`, `manifest.webmanifest` e ícones. **A v1.7.5 exige a migração SQL para identificar remetentes de convites pendentes.**
+3. Para atualizar a partir de uma versão anterior, verifique e aplique, **na ordem**, as migrações que ainda faltarem: `migration_v1_7_0.sql`, `migration_v1_7_1.sql`, `migration_v1_7_2.sql` e `migration_v1_7_5.sql`. A migração 1.7.0 incluída no pacote foi corrigida para evitar conflito de políticas já existentes. As migrações pressupõem o esquema base de versões anteriores, incluindo 1.5.0.
 4. No **Supabase Authentication → URL Configuration**, configure a URL do aplicativo como URL permitida para redirecionamento de autenticação e recuperação de senha.
 5. Aguarde a publicação do GitHub Pages, recarregue a página e, se a PWA instalada continuar exibindo uma versão antiga, feche e reabra a aplicação.
 6. Valide os fluxos principais com duas contas de teste antes de liberar alterações a outros usuários.
@@ -33,6 +33,15 @@ FitPact é uma aplicação web progressiva (PWA), em português brasileiro, para
 > **Importante:** a atualização dos arquivos do GitHub não executa migrações SQL automaticamente. A aplicação requer conexão com a internet para sincronizar com o Supabase.
 
 ## Histórico de versões (release notes)
+
+### v1.7.5 — 18/10/2026
+
+- **FP-36 · Correção:** verificação da conquista usa a semana do treino, inclusive semanas futuras; a meta é verificada após atualizar o treino. Chave de comemoração por usuário e semana renovada para impedir bloqueio indevido por registros de testes anteriores. Uma celebração por semana.
+- **FP-37 · Correção:** nomes de remetentes de convites pendentes agora são visíveis através de uma política RLS restrita aos dois participantes da solicitação. Texto do convite recebido também identifica o remetente.
+- **Banco de dados:** executar `migration_v1_7_5.sql` **antes de publicar** os arquivos. Não apaga dados existentes.
+- **Validação:** sintaxe e integridade do pacote verificadas; testes de uso com duas contas e semanas diferentes ainda necessários.
+
+
 
 ### v1.7.4 — 18/10/2026
 
