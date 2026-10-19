@@ -1,6 +1,85 @@
+# FitPact 1.9.0 — Produção
+
+**Status:** homologação funcional final aprovada em 19/10/2026 (21/21 verificações, sem falhas). Pacote preparado para publicação manual; **não publicado automaticamente**.
+
+## Instalação em produção
+
+1. Faça backup dos arquivos atuais da versão 1.8.0 e preserve uma cópia para reversão. Considere também backup dos dados do Supabase antes da atualização.
+2. O `app.js` deste pacote já utiliza o **Supabase de produção** e sua chave pública (publishable). Não inserir chave `service_role` no frontend.
+3. **Nenhum SQL novo é necessário para a atualização da 1.8.0 para a 1.9.0.** Os scripts em `sql/` são históricos e não devem ser reaplicados num banco já atualizado.
+4. No repositório GitHub Pages de produção, substitua os arquivos da aplicação pelos desta distribuição. A pasta `sql/` e `docs/` pode ficar no repositório para documentação, mas não precisa ser servida pelo Pages.
+5. Confirme que o cabeçalho mostra `v1.9.0`; atualize a página/PWA caso a versão anterior esteja em cache.
+6. Faça teste rápido pós-publicação: login, plano semanal, modelos, histórico, amigos e os quatro painéis da aba Evolução.
+7. Em caso de problema crítico, restaure os arquivos web guardados da 1.8.0; não reverta nem elimine dados do Supabase automaticamente.
+
+## Release notes (histórico acumulado)
+
+### 1.9.0 — 19/10/2026 (homologada para produção)
+- **FP-46:** indicadores de dias treinados, atividades concluídas, semanas com meta atingida e cumprimento.
+- **FP-47:** gráfico semanal de dias treinados versus meta.
+- **FP-48:** calendário de consistência com detalhes por dia.
+- **FP-49:** distribuição de atividades concluídas, incluindo substituições.
+- **FP-50:** comparação mensal com seleção de mês vinculada aos filtros e períodos proporcionais.
+- **FP-51 a FP-53:** filtros de período, atualização dos dados e interface responsiva.
+- **Conforto visual:** quatro painéis recolhidos por padrão, expandidos individualmente.
+- **Validação:** beta.1 11/11; beta.2 12/12; beta.3 apresentou uma falha e um item não testado; beta.3.1 corrigida 12/12; homologação final 21/21.
+- **Banco de dados:** sem migração adicional sobre a 1.8.0.
+
+
+### 1.9.0-beta.3.1 — 19/10/2026
+- **Correção FP-50:** a Comparação mensal agora oferece seleção dos meses pertencentes ao filtro da aba Evolução, incluindo filtros personalizados. Ao mudar o filtro, a seleção é atualizada.
+- O mês escolhido é comparado ao mês anterior, que pode estar fora do filtro exclusivamente como referência, com aviso explícito.
+- A comparação mantém intervalos equivalentes de dias (respeitando meses mais curtos), os quatro painéis recolhíveis e a indicação **—** para cumprimento sem meta.
+- **Homologação:** beta.3 teve 12 testes aprovados, 1 falha no filtro e 1 item não testado; beta.3.1 foi aprovada em 12/12 no reteste; homologação final 21/21 aprovada.
+- **SQL:** sem novas migrações. Produção 1.8.0 preservada.
+
+
+
+### 1.9.0-beta.3 — 19/10/2026
+- **FP-50 — Comparação mensal:** painel recolhível com dias treinados, atividades concluídas e cumprimento da meta, comparando os mesmos dias do mês mais recente e do anterior.
+- Diferenças absolutas e diferenças em pontos percentuais; apresentação neutra de reduções e ausência de meta.
+- Os painéis semanais, calendário, distribuição e comparação mensal iniciam recolhidos e podem ser abertos independentemente.
+- Mantidas as configurações do Supabase de beta e a pasta `sql/` com todas as migrações históricas; **sem nova migração SQL**.
+- **Histórico:** a beta.3 apresentou falha no filtro mensal, corrigida na beta.3.1.
+
+
+### 1.9.0-beta.2 — 19/10/2026
+- **FP-48:** calendário mensal de consistência, com navegação entre meses, destaque de dias treinados e consulta dos treinos por dia; datas futuras e fora do período ficam desativadas.
+- **FP-49:** distribuição por atividade concluída, com contagem, percentagem e barras proporcionais; considera a atividade efetivamente realizada em substituições e preserva os nomes históricos.
+- **Conforto visual:** gráfico semanal, calendário e distribuição começam recolhidos; cada painel pode ser aberto separadamente, mantendo o estado durante atualizações da aplicação.
+- **SQL:** nenhuma nova migração; todos os scripts históricos permanecem na pasta `sql/`.
+- **Entregue na beta.3:** comparação mensal FP-50; filtro corrigido na beta.3.1.
+
+
+
+### 1.9.0-beta.1 — 19/10/2026
+- **FP-46:** nova aba **Evolução** com dias treinados, atividades concluídas, semanas com meta atingida e taxa de cumprimento.
+- **FP-47:** gráfico semanal de dias treinados versus meta, com identificação de semanas parciais, sem meta e em andamento.
+- **FP-51:** filtros de 1, 3, 6 e 12 meses e intervalo personalizado.
+- **FP-52:** indicadores derivados dos treinos já guardados, recalculados após alterações.
+- **FP-53:** interface adaptada a dispositivos móveis; detalhes recolhíveis.
+- **Ainda não incluído nesta beta.1:** calendário de consistência, distribuição por atividade e comparação mensal (implementação nas betas seguintes).
+- **SQL:** nenhuma nova migração. Pasta `sql/` contém os scripts históricos para instalações novas, **não executar novamente** num banco já atualizado.
+
+### 1.8.0 — 19/10/2026 (estável, homologada em produção)
+- **FP-39:** guardar semanas como modelos privados, com dias, atividades, horários, PT e observações.
+- **FP-40:** aplicar modelos na semana atual ou futura, adicionando sem duplicar ou substituindo o plano mediante confirmação e proteção de treinos executados.
+- **FP-41:** renomear, duplicar e excluir modelos sem modificar semanas já aplicadas.
+- **FP-42 a FP-44:** sequência atual de semanas com meta atingida, recorde pessoal e apresentação no Histórico; semanas sem meta neutras; semanas futuras concluídas antecipadamente não antecipam a sequência.
+- **FP-45:** painel Modelos de semanas recolhido por padrão, com contagem de modelos e funções preservadas.
+- **Validação:** 47 verificações aprovadas em beta, nenhuma falha; módulo Amigos confirmado como funcional após a publicação em produção.
+- **Banco de dados:** migração `sql/06_migration_v1_8_0_beta_1.sql` aplicada e confirmada em produção.
+
+## Nota sobre versões beta
+As versões beta acima são documentadas para rastreabilidade; este pacote é a versão final com configuração de produção.
+
+---
+
+## Documentação histórica da 1.8.0 e versões anteriores
+
 # FitPact 1.8.0 — Distribuição de produção
 
-**Status: publicação autorizada com ressalva.** Origem funcional: 1.8.0-beta.2, aprovada nos testes executados (47 aprovados, 0 falhas, 6 testes sociais não executados). A versão 1.7.6 deve permanecer arquivada para reversão.
+**Status histórico da distribuição 1.8.0: publicação autorizada com ressalva.** Origem funcional: 1.8.0-beta.2, aprovada nos testes executados (47 aprovados, 0 falhas, 6 testes sociais não executados). A versão 1.7.6 deve permanecer arquivada para reversão.
 
 ## Implantação sobre a versão 1.7.6
 
