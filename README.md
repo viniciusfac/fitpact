@@ -1,3 +1,62 @@
+# FitPact 1.10.0 — Produção (homologada) 
+
+## 1.10.0 — Produção — 21/10/2026
+
+- **Homologação beta.3:** 13 de 13 verificações aprovadas, incluindo interações sociais, filtros de evolução, privacidade entre amigos, modelos de semanas, recuperação, substituições e navegação móvel.
+- Evolução unificada: seletor **Eu/Amigo** controla os seis indicadores, os quatro painéis analíticos e o Histórico detalhado.
+- Cartões de **Sequência atual** e **Recorde pessoal** para o usuário selecionado, sem linha duplicada no Histórico detalhado.
+- Menu: **Plano Semanal → Evolução → Amigos → Atividades → Configurações**.
+- Mantidas melhorias de usabilidade 1.9.1: login/cadastro, painéis recolhíveis, atividades ativas/inativas, ícones e histórico de interações com **Carregar mais 10**.
+- **Configuração:** Supabase de produção com chave pública publicável. Não executar SQL adicional para atualizar esta versão; scripts históricos ficam em `sql/`.
+- **Próxima versão planejada:** 1.11.0-beta.1 — conquistas permanentes de treino e sociais, com visualização Eu/Amigo. Compartilhamento mensal retirado do escopo por ora.
+
+### Publicação e reversão
+
+1. Faça backup do conteúdo publicado no GitHub Pages e preserve o ZIP estável da versão 1.9.0.
+2. Publique os arquivos **do conteúdo deste ZIP** na raiz do repositório `viniciusfac/fitpact`, preservando a estrutura `docs/` e `sql/`.
+3. Aguarde o GitHub Pages atualizar; atualize o PWA/reabra o navegador e confirme o cabeçalho **v1.10.0**.
+4. Verifique login, dados próprios, seletor de amigos, reações, incentivos e permissões entre contas.
+5. Em caso de regressão, restaure os arquivos da versão 1.9.0 no GitHub; **não** apague nem reverta dados do Supabase sem análise prévia.
+
+**Nota:** trechos anteriores do README registram decisões e pendências históricas de versões beta; esta seção é o estado atual de publicação.
+
+
+**Somente ambiente beta. Não publicar em produção.** Base: 1.9.1-beta.2.
+
+- Painel recolhível **Evolução dos amigos** dentro da aba Evolução; inicia fechado.
+- Seleção entre amizades aceitas; cartões de dias treinados, atividades concluídas, semanas com meta atingida e cumprimento da meta.
+- Respeita o filtro global de período e as políticas RLS existentes para treinos de amigos aceitos.
+- Não altera dados de outros usuários e não inclui novos comandos SQL.
+- Preserva a Evolução individual e demais funcionalidades da 1.9.1-beta.2.
+- Pendente: validação com duas contas, revogação de amizade, permissões e verificações sociais anteriores.
+
+## Histórico cumulativo
+
+# FitPact 1.9.1-beta.2 — Ambiente beta
+
+**Não publicar em produção.** Base: 1.9.0 estável. Supabase: beta.
+
+## Release notes 1.9.1-beta.2 — 20/10/2026
+
+- Sequência atual e Recorde pessoal agora aparecem como dois cartões adicionais junto dos indicadores da aba Evolução, com valores derivados de `consistencyStats(user.id)` (mesma regra de cálculo da 1.8.0).
+- Removido o painel redundante de sequência/recorde; Histórico detalhado continua recolhível.
+- Mantidos todos os demais comportamentos da beta.1, sem alteração de SQL.
+- Teste 01 da beta.1: 15 aprovados, 0 falhas, 2 não testados (histórico de interações e funcionalidades sociais). Validar na beta.2.
+
+## Release notes 1.9.1-beta.1 — 20/10/2026
+
+- Cadastro e login em opções separadas e explicativas.
+- Histórico detalhado e sequência/recorde integrados à aba Evolução em painéis recolhíveis; histórico de amigos preservado.
+- Atividades ativas/inativas separadas em painéis recolhíveis; ações compactas de editar, desativar/reativar e excluir (apenas sem vínculos).
+- Histórico de interações com carregamento progressivo de 10 registros (dos já carregados).
+- Configurações: gerenciamento de amigos e convites recolhível.
+- Plano Semanal: repetir e reiniciar semana dentro de Modelos de semanas; recuperação com ações em ícones.
+- Checkboxes e ações de atividades com alinhamento visual padronizado.
+- Nenhuma migração SQL nova; pasta sql/ histórica preservada.
+- Evolução dos amigos agregada e compartilhamento opcional adiados para 1.10.0.
+
+## Histórico anterior (mantido)
+
 # FitPact 1.9.0 — Produção
 
 **Status:** homologação funcional final aprovada em 19/10/2026 (21/21 verificações, sem falhas). Pacote preparado para publicação manual; **não publicado automaticamente**.
@@ -334,3 +393,18 @@ Os scripts de banco permanecem exclusivamente em `sql/`. A versão 1.7.6 de prod
 - Sequência atual e recorde pessoal com semanas sem meta neutras e semanas futuras fora do cálculo até a data cronológica.
 - 47 verificações aprovadas, zero falhas, seis verificações do módulo Amigos não executadas; **homologação com ressalva**.
 - Migração SQL 1.8.0 confirmada como aplicada em produção antes da distribuição.
+
+
+### 1.10.0-beta.2
+- Seletor único Eu/amigos para indicadores, gráficos e histórico.
+- Sequência e recorde de cada pessoa selecionada.
+- Histórico sem título e filtros duplicados.
+- Feed de atividades concluídas dos amigos ampliado para 30 dias, até 10 itens, com reações.
+- Testes sociais e privacidade ainda exigem validação no beta.
+
+### 1.10.0-beta.3 — Ajustes finais de navegação
+- Menu principal: Plano Semanal → Evolução → Amigos → Atividades → Configurações.
+- Removida a exibição duplicada de Sequência atual e Recorde no Histórico detalhado; cartões superiores permanecem.
+- Mantidas as funcionalidades da beta.2. Teste 02 beta.2: 12/12 aprovados.
+- Pendente: regressão final antes de autorizar publicação em produção.
+- Planejamento futuro 1.11.0: coleção de conquistas de treino e sociais, permanentes e consultáveis por amigo; compartilhamento mensal adiado.
