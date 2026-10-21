@@ -1,3 +1,90 @@
+# FitPact v1.11.0 — Produção (pacote para revisão)
+
+**Estado:** preparado para revisão e instalação manual. **Nenhuma alteração foi aplicada ao Supabase ou GitHub Pages de produção.**
+
+## Implantação segura
+
+1. Confirme que o ambiente de produção está na versão 1.10.0 e faça backup do banco e dos arquivos publicados.
+2. Revise e execute **somente** `sql/10_migration_v1_11_0_PRODUCAO.sql` no **Supabase de produção**. O script reúne a criação da coleção (08) e a correção da função segura (09 + beta.3.1). Não execute 08/09 separadamente em produção.
+3. Confirme a criação de `public.user_achievements` e `public.fitpact_claim_achievements()` e valide RLS com contas de teste.
+4. Publique o conteúdo da pasta na raiz do GitHub Pages da produção, mantendo o backup anterior para reversão.
+5. Atualize a PWA/cache e confira `FitPact 1.11.0`, login, conquistas, amizades e demais funcionalidades.
+
+**Configuração:** `app.js` já aponta para o projeto Supabase de produção com chave **publicável**. Não há chave de serviço neste pacote.
+
+**Rollback:** restaurar os arquivos da v1.10.0. A migração cria dados persistentes; não apague tabela/medalhas sem um plano de restauração. O SQL não foi executado contra a base real nesta preparação.
+
+## Novidades 1.11.0 — 21/10/2026
+
+- Nova aba **Conquistas** com 15 medalhas em Treinos, Consistência e Social.
+- Desbloqueios permanentes e consulta de conquistas de amigos aceitos, com RLS.
+- Critérios validados pelo Supabase por RPC autenticada, sem INSERT direto pelo cliente.
+- Ícones e rótulos nas seis abas: Plano Semanal, Evolução, Conquistas, Amigos, Atividades e Configurações.
+- Correção da ambiguidade `achievement_id` da beta.3.
+- Homologações relatadas: beta.1 14/14; beta.2 10/10; homologação 15/15; correção SQL 4/4; segurança/regressão 12/12 — **55/55** verificações reportadas como aprovadas.
+
+---
+
+## Histórico anterior (preservado)
+
+# FitPact v1.11.0-beta.3 — Segurança das Conquistas (ambiente beta)
+
+**NÃO publicar em produção.** Execute `sql/09_migration_v1_11_0_beta_3_security.sql` **somente no Supabase beta**, após a migração 08. Não execute novamente a 08 se já foi aplicada.
+
+## Alterações beta.3
+- Retirada a permissão de INSERT direto na tabela `user_achievements` para usuários autenticados.
+- Função RPC `fitpact_claim_achievements()` valida no banco, para o usuário autenticado, os 15 critérios; sem parâmetros de usuário ou medalha.
+- Registro idempotente e permanente, com a data original preservada.
+- Consulta das conquistas continua limitada pelo RLS já existente.
+- Contagens sociais feitas diretamente nas tabelas, sem o limite de paginação do feed.
+- Atenção: medalhas concedidas antes da correção não são revogadas automaticamente, em respeito à regra de permanência. Verifique dados históricos de beta se necessário.
+
+## Homologação de segurança necessária
+1. Aplicar SQL 09 no Supabase beta; verificar mensagem de sucesso.
+2. Com usuário autenticado, chamar a RPC e confirmar retorno somente de medalhas merecidas.
+3. Tentar INSERT direto em `user_achievements` via cliente autenticado: deve ser negado.
+4. Tentar UPDATE e DELETE: devem ser negados.
+5. Verificar consulta de amigo aceito e de usuário não amigo (RLS).
+6. Confirmar desbloqueio automático após atividade, reação e incentivo.
+7. Testar sequências, semanas sem meta e persistência.
+
+**Nota técnica:** as regras de metas/semana foram reproduzidas em SQL a partir da implementação do app. Ainda exigem homologação com dados reais, inclusive datas próximas de mudanças de fuso horário. A execução de SQL não foi testada contra uma instância real de PostgreSQL/Supabase neste pacote.
+
+---
+
+# FitPact v1.11.0-beta.2 — Conquistas (ambiente beta)
+
+**NÃO instalar em produção.** Antes de testar, executar `sql/08_migration_v1_11_0_beta_1.sql` **somente no Supabase beta**. A aplicação está pré-configurada com a URL e a chave pública do projeto beta.
+
+## Novidades 1.11.0-beta.2
+- Padronização dos seis botões do menu principal: cada aba apresenta ícone e texto, preservando a ordem e a acessibilidade.
+- Nenhuma alteração nas regras de desbloqueio, no banco de dados ou nas funcionalidades da beta.1.
+- Para instalações já migradas da beta.1, **não executar SQL novamente**. Instalações novas devem seguir a migração da beta.1.
+- Teste visual e regressão funcional obrigatórios antes de homologar.
+
+## Novidades 1.11.0-beta.1
+- Nova aba **Conquistas**, entre Evolução e Amigos.
+- 15 medalhas: treinos (6), consistência (5) e social (4).
+- Medalhas bloqueadas esmaecidas, desbloqueadas visíveis com data.
+- Coleção permanente no banco, independente dos filtros de período.
+- Seletor Eu/Amigo, limitado a amizades aceitas via RLS.
+- Registro idempotente de conquistas próprias.
+- Sem acesso de alteração das medalhas pelo frontend.
+
+**Limitações conhecidas beta.1:** o desbloqueio é calculado no navegador e ainda não possui validação de critérios no servidor; os indicadores sociais usam as últimas 500 reações e 200 incentivos carregados pelo app, podendo subcontar históricos longos; a data de conquistas históricas é a do primeiro registro, não a data original do feito. Sequências usam semanas com metas registradas, e merecem validação com histórico irregular.
+
+## Testes propostos
+1. Instalar migração apenas no beta e abrir app.
+2. Conferir 15 medalhas, grupos e aparência bloqueada/desbloqueada.
+3. Confirmar desbloqueios e persistência após reinício.
+4. Alternar Eu/Amigo e verificar RLS após remover amizade.
+5. Validar regras de sequência, treino e interações sociais.
+6. Validar navegação com seis abas em celular.
+
+---
+
+## Histórico acumulado anterior
+
 # FitPact 1.10.0 — Produção (homologada) 
 
 ## 1.10.0 — Produção — 21/10/2026
